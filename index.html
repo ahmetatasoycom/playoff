@@ -1,0 +1,1444 @@
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07152e" />
+
+    <title>PLAYOFF | Game Night</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <!-- ÜST MENÜ -->
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-mark">✦</span>
+        <span>
+          PLAY<span class="brand-light">OFF</span>
+          <small>GAME NIGHT CONTROL</small>
+        </span>
+      </a>
+
+      <div class="topbar-right">
+        <span class="live-dot"></span>
+        <span class="topbar-label">LOCAL EVENT</span>
+        <span class="topbar-divider"></span>
+        <span id="headerEventName">YENİ ETKİNLİK</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+
+      <!-- ================================================== -->
+      <!-- 1. ETKİNLİK KURULUMU                               -->
+      <!-- ================================================== -->
+
+      <section id="setupView" class="view setup-view">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="eyebrow-line"></span>
+            MATCHDAY STARTS HERE
+          </div>
+
+          <h1>
+            BU GECE<br />
+            <em>KİM KAZANACAK?</em>
+          </h1>
+
+          <p>
+            Ekibini topla. Takımları kura ile dağıt. Eşleşmeleri belirle.<br />
+            Gecenin şampiyonunu birlikte çıkarın.
+          </p>
+
+          <div class="hero-stats">
+            <div>
+              <b>01</b>
+              <span>KURULUM</span>
+            </div>
+            <i></i>
+            <div>
+              <b>02</b>
+              <span>KURA</span>
+            </div>
+            <i></i>
+            <div>
+              <b>03</b>
+              <span>FİNAL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="setup-card panel">
+          <div class="card-heading">
+            <div>
+              <span class="step-tag">01 / SETUP</span>
+              <h2>Etkinliğini kur</h2>
+            </div>
+            <span class="star-ball">✦</span>
+          </div>
+
+          <label class="field-label" for="eventName">
+            ETKİNLİK ADI
+          </label>
+
+          <input
+            id="eventName"
+            class="text-input"
+            type="text"
+            maxlength="48"
+            placeholder="Örn. Cuma Gecesi Kupası"
+            value="Cuma Gecesi Kupası"
+          />
+
+          <label class="field-label" for="gameSelect">
+            OYUN
+          </label>
+
+          <div class="select-wrap">
+            <select id="gameSelect" class="text-input">
+              <option value="EA SPORTS FC">EA SPORTS FC</option>
+              <option value="FIFA">FIFA</option>
+              <option value="Rocket League">Rocket League</option>
+              <option value="Mortal Kombat">Mortal Kombat</option>
+              <option value="Mario Kart">Mario Kart</option>
+              <option value="Super Smash Bros.">Super Smash Bros.</option>
+              <option value="Valorant">Valorant</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+            <span>⌄</span>
+          </div>
+
+          <label class="field-label" for="tournamentSize">
+            TURNUVA BÜYÜKLÜĞÜ
+          </label>
+
+          <div class="select-wrap">
+            <select id="tournamentSize" class="text-input">
+              <option value="4">4 TAKIM</option>
+              <option value="8">8 TAKIM</option>
+              <option value="16">16 TAKIM</option>
+            </select>
+            <span>⌄</span>
+          </div>
+
+          <label class="field-label" for="playerInput">
+            OYUNCULAR
+            <span id="playerCount" class="count-pill">0</span>
+          </label>
+
+          <div class="player-entry">
+            <input
+              id="playerInput"
+              class="text-input"
+              type="text"
+              maxlength="24"
+              placeholder="Oyuncu adını yaz..."
+            />
+
+            <button
+              id="addPlayerBtn"
+              class="add-btn"
+              type="button"
+              aria-label="Oyuncu ekle"
+            >
+              +
+            </button>
+          </div>
+
+          <div id="playerChips" class="player-chips">
+            <div class="empty-players">
+              İsimleri ekledikçe burada görünecekler.
+            </div>
+          </div>
+
+          <div class="setup-bottom">
+            <span>
+              <span class="check-icon">✓</span>
+              Hesap yok, oda kodu yok.
+            </span>
+
+            <button id="startBtn" class="primary-btn" type="button">
+              ETKİNLİĞİ BAŞLAT
+              <span>↗</span>
+            </button>
+          </div>
+
+          <p id="setupError" class="error-message" role="status"></p>
+        </div>
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 2. ANA MOD SEÇİMİ                                  -->
+      <!-- ================================================== -->
+
+      <section id="hubView" class="view hidden">
+
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-line"></span>
+              MATCHDAY CONTROL
+            </div>
+
+            <h1 id="hubTitle">CUMA GECESİ KUPASI</h1>
+
+            <p id="hubSubtitle">
+              EA SPORTS FC · 4 OYUNCU
+            </p>
+          </div>
+
+          <button id="backToSetup" class="ghost-btn" type="button">
+            ← KURULUMA DÖN
+          </button>
+        </div>
+
+        <!-- KADRO BİLGİSİ -->
+        <div class="roster-strip panel">
+          <div>
+            <span class="section-kicker">KADRO</span>
+            <strong id="rosterCount">0 oyuncu</strong>
+          </div>
+
+          <div id="rosterAvatars" class="roster-avatars"></div>
+
+          <button id="editRosterBtn" class="text-btn" type="button">
+            Kadroyu düzenle ↗
+          </button>
+        </div>
+
+        <!-- MOD SEÇİMİ -->
+        <div class="section-title">
+          <div>
+            <span class="section-kicker">CHOOSE YOUR GAME MODE</span>
+            <h2>NASIL OYNAMAK İSTİYORSUN?</h2>
+          </div>
+
+          <span class="subtle">
+            Oyun tarzını seç ve başla
+          </span>
+        </div>
+
+        <div class="mode-grid">
+
+          <!-- ÖZEL ÇARK OLUŞTUR -->
+          <button
+            id="createWheelMode"
+            class="mode-card wheel-mode"
+            data-mode="create"
+            type="button"
+          >
+            <span class="mode-number">01</span>
+
+            <span class="mode-icon">◉</span>
+
+            <span class="mode-title">
+              ÇARK OLUŞTUR
+            </span>
+
+            <span class="mode-desc">
+              Premier League, La Liga ve diğer liglerden istediğin takımları
+              seç. Kendi özel çarkını ve takım havuzunu oluştur.
+            </span>
+
+            <span class="mode-cta">
+              TAKIMLARINI SEÇ <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+          <!-- HAZIR ÇARK -->
+          <button
+            id="readyWheelMode"
+            class="mode-card challenge-mode"
+            data-mode="ready"
+            type="button"
+          >
+            <span class="mode-number">02</span>
+
+            <span class="mode-icon">⚽</span>
+
+            <span class="mode-title">
+              HAZIR ÇARKI DÖNDÜR
+            </span>
+
+            <span class="mode-desc">
+              Mevcut hazır takım havuzunu kullan. Hiçbir takım seçmeden
+              doğrudan eski kura sistemine geç.
+            </span>
+
+            <span class="mode-cta">
+              KURAYI BAŞLAT <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+          <!-- PUAN DURUMU -->
+          <button
+            id="standingsMode"
+            class="mode-card standings-mode"
+            type="button"
+          >
+            <span class="mode-number">03</span>
+
+            <span class="mode-icon">🏆</span>
+
+            <span class="mode-title">
+              PUAN DURUMU
+            </span>
+
+            <span class="mode-desc">
+              Herkes birbiriyle karşılaşsın. Takımlarını belirle, fikstürü
+              oluştur ve lig sıralamasında zirveye çık.
+            </span>
+
+            <span class="mode-cta">
+              LİGİ OLUŞTUR <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+        </div>
+
+        <div class="bottom-note">
+          <span class="note-star">✦</span>
+          HER MAÇ BİR HİKÂYE. HER GECE BİR ŞAMPİYON.
+        </div>
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 3. ÖZEL ÇARK OLUŞTURMA / TAKIM SEÇİMİ              -->
+      <!-- ================================================== -->
+
+      <section id="wheelEditor" class="view team-selection-view hidden">
+
+        <div class="selection-topbar">
+
+          <button id="closeWheelEditor" class="ghost-btn" type="button">
+            ← ÇARK SEÇİMİNE DÖN
+          </button>
+
+          <div class="selection-step">
+            <span class="live-dot"></span>
+            CUSTOM WHEEL CREATOR
+          </div>
+
+          <div class="selection-event-name" id="selectionEventName">
+            CUMA GECESİ KUPASI
+          </div>
+
+        </div>
+
+        <div class="selection-hero">
+
+          <div class="selection-hero-copy">
+
+            <div class="eyebrow">
+              <span class="eyebrow-line"></span>
+              BUILD YOUR DREAM POOL
+            </div>
+
+            <h1>
+              KENDİ<br />
+              <em>ÇARKINI</em><br />
+              OLUŞTUR.
+            </h1>
+
+            <p>
+              Ligini keşfet. İstediğin kulüpleri seç. Kendi takım havuzunu
+              oluştur ve kura heyecanını başlat.
+            </p>
+
+          </div>
+
+          <div class="selection-hero-visual">
+
+            <div class="selection-visual-glow"></div>
+            <div class="selection-visual-ring"></div>
+
+            <div class="selection-visual-content">
+              <span>PLAYOFF</span>
+              <strong>
+                CUSTOM<br />
+                WHEEL
+              </strong>
+              <small>YOUR GAME. YOUR RULES.</small>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- LİG SEÇİMİ -->
+        <section class="league-section">
+
+          <div class="selection-section-heading">
+
+            <div>
+              <span class="section-kicker">
+                01 / SELECT YOUR LEAGUE
+              </span>
+
+              <h2>LİGİNİ SEÇ</h2>
+            </div>
+
+            <span class="selection-hint">
+              Bir lig seçerek kulüpleri görüntüle
+            </span>
+
+          </div>
+
+          <div id="leagueList" class="league-grid">
+            <div class="league-loading">
+              Ligler hazırlanıyor...
+            </div>
+          </div>
+
+        </section>
+
+        <!-- TAKIM KATALOĞU -->
+        <section class="club-section">
+
+          <div class="club-section-top">
+
+            <div class="club-heading">
+
+              <span class="section-kicker">
+                02 / CHOOSE YOUR CLUBS
+              </span>
+
+              <div class="club-title-line">
+
+                <h2 id="selectedLeagueName">
+                  BİR LİG SEÇ
+                </h2>
+
+                <img
+                  id="selectedLeagueLogoImage"
+                  class="selected-league-logo"
+                  src=""
+                  alt=""
+                  hidden
+                />
+
+                <span
+                  id="selectedLeagueCountry"
+                  class="league-country"
+                ></span>
+
+              </div>
+
+              <p id="selectedLeagueDescription">
+                Takımları görüntülemek için yukarıdan bir lig seç.
+              </p>
+
+            </div>
+
+            <div class="club-tools">
+
+              <label class="team-search">
+                <span>⌕</span>
+
+                <input
+                  id="teamSearchInput"
+                  type="search"
+                  placeholder="Takım ara..."
+                  autocomplete="off"
+                />
+              </label>
+
+              <div class="league-team-total">
+                <span id="leagueTeamCount">0</span>
+                <small>KULÜP</small>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div id="teamGrid" class="team-grid">
+
+            <div class="team-grid-empty">
+              <span class="empty-ball">◉</span>
+
+              <strong>
+                SAHAYA ÇIKMAYA HAZIR MISIN?
+              </strong>
+
+              <p>
+                Başlamak için yukarıdan bir lig seç.
+              </p>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- SEÇİM ÖZETİ -->
+        <section class="selection-summary panel">
+
+          <div class="summary-heading">
+
+            <div>
+              <span class="section-kicker">
+                03 / YOUR TEAM POOL
+              </span>
+
+              <h2>SEÇİLEN TAKIMLAR</h2>
+            </div>
+
+            <div class="summary-counter">
+              <strong id="selectedTeamCount">0</strong>
+              <span>TAKIM SEÇİLDİ</span>
+            </div>
+
+          </div>
+
+          <div id="selectedTeamList" class="selected-team-list">
+            <div class="selected-empty">
+              Henüz takım seçmedin.
+            </div>
+          </div>
+
+          <div class="summary-footer">
+
+            <div class="summary-info">
+
+              <span class="summary-info-icon">✦</span>
+
+              <div>
+                <strong id="teamPickerSummary">
+                  ÇARK HAVUZUN HAZIR DEĞİL
+                </strong>
+
+                <small id="teamSelectionRequirement">
+                  Devam etmek için en az 4 takım seçmelisin.
+                </small>
+              </div>
+
+            </div>
+
+            <div class="summary-actions">
+
+              <button
+                id="clearSelectedTeams"
+                class="ghost-btn"
+                type="button"
+              >
+                SEÇİMİ TEMİZLE
+              </button>
+
+              <button
+                id="applySelectedTeams"
+                class="primary-btn"
+                type="button"
+                disabled
+              >
+                ÇARKI OLUŞTUR
+                <span>↗</span>
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 4. PUAN DURUMU - TAKIM DAĞITIM YÖNTEMİ             -->
+      <!-- ================================================== -->
+
+      <section id="standingsMethodView" class="view hidden">
+
+        <div class="selection-topbar">
+
+          <button id="standingsBackToHub" class="ghost-btn" type="button">
+            ← ANA MENÜYE DÖN
+          </button>
+
+          <div class="selection-step">
+            <span class="live-dot"></span>
+            LEAGUE MODE
+          </div>
+
+          <div class="selection-event-name" id="standingsEventName">
+            CUMA GECESİ KUPASI
+          </div>
+
+        </div>
+
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-line"></span>
+              ROUND ROBIN LEAGUE
+            </div>
+
+            <h1>PUAN DURUMU</h1>
+
+            <p>
+              Her oyuncu diğer bütün oyuncularla bir kez karşılaşacak.
+              Önce takımlarınızı belirleyin.
+            </p>
+          </div>
+        </div>
+
+        <!-- OYUNCU BİLGİSİ -->
+        <div class="roster-strip panel">
+          <div>
+            <span class="section-kicker">LİG KADROSU</span>
+            <strong id="standingsPlayerCount">0 oyuncu</strong>
+          </div>
+
+          <div id="standingsPlayerAvatars" class="roster-avatars"></div>
+
+          <span class="text-btn">
+            HERKES BİRBİRİYLE OYNAR
+          </span>
+        </div>
+
+        <div class="section-title">
+          <div>
+            <span class="section-kicker">01 / TEAM ASSIGNMENT</span>
+            <h2>TAKIMLARINIZI NASIL SEÇECEKSİNİZ?</h2>
+          </div>
+        </div>
+
+        <div class="mode-grid standings-method-grid">
+
+          <!-- ÖZEL ÇARK -->
+          <button
+            id="standingsCustomWheelBtn"
+            class="mode-card wheel-mode"
+            type="button"
+          >
+            <span class="mode-number">01</span>
+            <span class="mode-icon">◉</span>
+
+            <span class="mode-title">
+              ÖZEL ÇARK
+            </span>
+
+            <span class="mode-desc">
+              Liglerden istediğiniz takımları seçin. Oluşturduğunuz özel
+              havuzdan her oyuncuya bir takım dağıtın.
+            </span>
+
+            <span class="mode-cta">
+              ÖZEL HAVUZ OLUŞTUR <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+          <!-- HAZIR ÇARK -->
+          <button
+            id="standingsReadyWheelBtn"
+            class="mode-card challenge-mode"
+            type="button"
+          >
+            <span class="mode-number">02</span>
+            <span class="mode-icon">⚽</span>
+
+            <span class="mode-title">
+              HAZIR ÇARK
+            </span>
+
+            <span class="mode-desc">
+              Hazır takım havuzunu kullanın. Sistem her oyuncuya rastgele
+              bir takım belirlesin.
+            </span>
+
+            <span class="mode-cta">
+              HAZIR HAVUZU KULLAN <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+          <!-- DOĞRUDAN TAKIM SEÇİMİ -->
+          <button
+            id="standingsManualTeamsBtn"
+            class="mode-card standings-mode"
+            type="button"
+          >
+            <span class="mode-number">03</span>
+            <span class="mode-icon">⚽</span>
+
+            <span class="mode-title">
+              TAKIMLARI BİZ SEÇELİM
+            </span>
+
+            <span class="mode-desc">
+              Her oyuncu için liglerden istediğiniz takımı doğrudan seçin.
+              Kura kullanmadan kendi eşleşmenizi oluşturun.
+            </span>
+
+            <span class="mode-cta">
+              TAKIM SEÇİMİNE GEÇ <b>↗</b>
+            </span>
+
+            <span class="mode-orbit"></span>
+          </button>
+
+        </div>
+
+        <div class="bottom-note">
+          <span class="note-star">✦</span>
+          BİR LİG. HERKES BİRBİRİYLE. TEK ŞAMPİYON.
+        </div>
+
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 5. PUAN DURUMU - TAKIM ATAMA EKRANI                -->
+      <!-- ================================================== -->
+
+      <section id="standingsTeamView" class="view hidden">
+
+        <div class="selection-topbar">
+
+          <button id="standingsBackToMethods" class="ghost-btn" type="button">
+            ← SEÇİM YÖNTEMLERİNE DÖN
+          </button>
+
+          <div class="selection-step">
+            <span class="live-dot"></span>
+            TEAM ASSIGNMENT
+          </div>
+
+          <div class="selection-event-name">
+            PUAN DURUMU
+          </div>
+
+        </div>
+
+        <div class="page-head">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-line"></span>
+              BUILD YOUR LEAGUE
+            </div>
+
+            <h1>TAKIMLARI DAĞIT</h1>
+
+            <p>
+              Her oyuncuya yalnızca bir takım verilecek. Bir takım
+              seçildikten sonra diğer oyuncular için havuzdan çıkarılacak.
+            </p>
+          </div>
+        </div>
+
+        <!-- OYUNCULAR -->
+        <section class="panel standings-assignment-panel">
+
+          <div class="panel-title">
+            <div>
+              <span class="section-kicker">01 / YOUR PLAYERS</span>
+              <h3>OYUNCU TAKIMLARI</h3>
+            </div>
+
+            <span id="standingsAssignmentProgress" class="count-pill">
+              0 / 0
+            </span>
+          </div>
+
+          <div
+            id="standingsAssignmentPlayers"
+            class="standings-assignment-players"
+          >
+            <!-- Oyuncu kartları JS tarafından oluşturulacak -->
+          </div>
+
+          <div
+            id="standingsCurrentPlayer"
+            class="selected-player-info"
+          >
+            Takım belirlemek için bir oyuncu seç.
+          </div>
+
+        </section>
+
+        <!-- TAKIM SEÇİM ALANI -->
+        <section class="panel standings-team-picker">
+
+          <div class="panel-title">
+            <div>
+              <span class="section-kicker">02 / SELECT A TEAM</span>
+              <h3 id="standingsPickerTitle">TAKIM SEÇİMİ</h3>
+            </div>
+
+            <span id="standingsAvailableTeamCount" class="count-pill">
+              0
+            </span>
+          </div>
+
+          <!-- LİG FİLTRESİ -->
+          <div
+            id="standingsLeagueList"
+            class="league-grid standings-league-grid"
+          >
+            <!-- Ligler JS tarafından oluşturulacak -->
+          </div>
+
+          <!-- TAKIMLAR -->
+          <div
+            id="standingsTeamGrid"
+            class="team-grid standings-team-grid"
+          >
+            <div class="team-grid-empty">
+              <span class="empty-ball">◉</span>
+
+              <strong>
+                ÖNCE BİR LİG SEÇ
+              </strong>
+
+              <p>
+                Takımları görüntülemek için yukarıdan lig seç.
+              </p>
+            </div>
+          </div>
+
+          <!-- ÇARK ALANI -->
+          <div
+            id="standingsWheelArea"
+            class="standings-wheel-area hidden"
+          >
+
+            <div class="wheel-wrap">
+
+              <div class="wheel-pointer"></div>
+
+              <canvas
+                id="standingsWheelCanvas"
+                width="600"
+                height="600"
+                aria-label="Puan durumu takım seçim çarkı"
+              ></canvas>
+
+              <div class="wheel-center">
+                ✦
+                <small>PLAYOFF</small>
+              </div>
+
+            </div>
+
+            <button
+              id="standingsSpinBtn"
+              class="primary-btn spin-btn"
+              type="button"
+            >
+              TAKIMINI BELİRLE
+              <span>↻</span>
+            </button>
+
+            <div id="standingsSpinStatus" class="spin-status">
+              Bir oyuncu seçerek çarkı döndür.
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- TAKIM ATAMA ÖZETİ -->
+        <section class="panel standings-assignment-summary">
+
+          <div class="summary-heading">
+            <div>
+              <span class="section-kicker">03 / LEAGUE ROSTER</span>
+              <h2>TAKIM DAĞILIMI</h2>
+            </div>
+
+            <div class="summary-counter">
+              <strong id="standingsAssignedCount">0</strong>
+              <span>TAKIM ATANDI</span>
+            </div>
+          </div>
+
+          <div
+            id="standingsAssignedTeams"
+            class="standings-assigned-teams"
+          >
+            <div class="selected-empty">
+              Henüz hiçbir oyuncuya takım atanmadı.
+            </div>
+          </div>
+
+          <div class="summary-footer">
+
+            <div class="summary-info">
+              <span class="summary-info-icon">✦</span>
+
+              <div>
+                <strong id="standingsAssignmentSummary">
+                  LİG KADRON HAZIR DEĞİL
+                </strong>
+
+                <small id="standingsAssignmentRequirement">
+                  Devam etmek için bütün oyunculara takım atanmalı.
+                </small>
+              </div>
+            </div>
+
+            <button
+              id="createStandingsBtn"
+              class="primary-btn"
+              type="button"
+              disabled
+            >
+              FİKSTÜRÜ OLUŞTUR
+              <span>↗</span>
+            </button>
+
+          </div>
+
+        </section>
+
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 6. ETKİNLİK ARAÇLARI / TAKIM KURASI               -->
+      <!-- ================================================== -->
+
+      <section id="toolView" class="view hidden">
+
+        <div class="tool-top">
+
+          <button id="backToHub" class="ghost-btn" type="button">
+            ← ÇARK SEÇİMİNE DÖN
+          </button>
+
+          <div class="tool-event">
+            <span class="live-dot"></span>
+            <span id="toolEventName">CUMA GECESİ KUPASI</span>
+          </div>
+
+        </div>
+
+        <!-- ŞANS ÇARKI / TAKIM DAĞITIMI -->
+        <div id="wheelTool" class="tool-panel hidden">
+
+          <div class="page-head compact">
+
+            <div>
+
+              <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                TEAM DRAW
+              </div>
+
+              <h1>TAKIM KURASI</h1>
+
+              <p>
+                Önce oyuncunu seç, ardından çarkı döndürerek takımını belirle.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="wheel-layout">
+
+            <!-- ÇARK ALANI -->
+            <div class="wheel-stage panel">
+
+              <div class="wheel-label">
+                <span class="live-dot"></span>
+                OFFICIAL TEAM DRAW
+              </div>
+
+              <!-- OYUNCU SEÇİMİ -->
+              <div class="draw-player-area">
+
+                <span class="section-kicker">
+                  TAKIM BELİRLEYECEĞİN OYUNCUYU SEÇ
+                </span>
+
+                <div
+                  id="drawPlayerList"
+                  class="draw-player-list"
+                ></div>
+
+                <div
+                  id="playerTeamAssignments"
+                  class="player-team-assignments"
+                ></div>
+
+                <div
+                  id="selectedPlayerInfo"
+                  class="selected-player-info"
+                >
+                  Önce bir oyuncu seç.
+                </div>
+
+              </div>
+
+              <!-- ÇARK -->
+              <div class="wheel-wrap">
+
+                <div class="wheel-pointer"></div>
+
+                <canvas
+                  id="wheelCanvas"
+                  width="600"
+                  height="600"
+                  aria-label="Takım kura çarkı"
+                ></canvas>
+
+                <div class="wheel-center">
+                  ✦
+                  <small>PLAYOFF</small>
+                </div>
+
+              </div>
+
+              <button
+                id="spinBtn"
+                class="primary-btn spin-btn"
+                type="button"
+                disabled
+              >
+                ÇARKI DÖNDÜR
+                <span>↻</span>
+              </button>
+
+              <div id="spinStatus" class="spin-status">
+                Takım kurasına başlamak için bir oyuncu seç.
+              </div>
+
+              <button
+                id="goToTournament"
+                class="primary-btn full-btn hidden"
+                type="button"
+              >
+                TURNUVAYA GEÇ
+                <span>↗</span>
+              </button>
+
+            </div>
+
+            <!-- SAĞ BİLGİ ALANI -->
+            <aside class="wheel-side">
+
+              <div class="panel side-panel">
+
+                <div class="panel-title">
+
+                  <div>
+                    <span class="section-kicker">
+                      KALAN TAKIMLAR
+                    </span>
+
+                    <h3 id="poolTitle">Takımlar</h3>
+                  </div>
+
+                  <span id="poolCount" class="count-pill">
+                    0
+                  </span>
+
+                </div>
+
+                <div id="poolList" class="pool-list"></div>
+
+                <div class="pool-actions">
+
+                  <button
+                    id="restorePoolBtn"
+                    class="ghost-btn full-btn"
+                    type="button"
+                  >
+                    ↺ KURAYI SIFIRLA
+                  </button>
+
+                </div>
+
+              </div>
+
+              <div class="panel result-panel">
+
+                <span class="section-kicker">
+                  SON ATAMA
+                </span>
+
+                <div id="lastResult" class="last-result">
+                  —
+                </div>
+
+                <p>
+                  Çekilen takım ilgili oyuncuya atanır ve havuzdan çıkarılır.
+                </p>
+
+              </div>
+
+            </aside>
+
+          </div>
+
+        </div>
+
+
+        <!-- TURNUVA AĞACI -->
+        <div id="tournamentTool" class="tool-panel hidden">
+
+          <div class="page-head compact">
+
+            <div>
+
+              <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                KNOCKOUT STAGE
+              </div>
+
+              <h1>TURNUVA AĞACI</h1>
+
+              <p>
+                Takım kuraları tamamlandı. Şampiyonaya giden yol başlıyor.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="bracket-toolbar panel">
+
+            <div>
+              <span class="section-kicker">
+                KNOCKOUT BRACKET
+              </span>
+
+              <strong id="bracketCaption">
+                Turnuva ağacı
+              </strong>
+            </div>
+
+            <div class="bracket-view-switch">
+
+              <button
+                class="view-switch active"
+                data-display="both"
+                type="button"
+              >
+                Oyuncu + takım
+              </button>
+
+              <button
+                class="view-switch"
+                data-display="team"
+                type="button"
+              >
+                Takım
+              </button>
+
+              <button
+                class="view-switch"
+                data-display="player"
+                type="button"
+              >
+                Oyuncu
+              </button>
+
+            </div>
+
+          </div>
+
+          <div id="bracketBoard" class="bracket-board">
+
+            <div class="bracket-placeholder">
+              Takım atamaları tamamlandığında turnuva ağacı burada
+              oluşturulacak.
+            </div>
+
+          </div>
+
+          <div class="bracket-hint">
+            Bir maçın kazananını belirlemek için oyuncu veya takım adına tıkla.
+            Kazanan bir sonraki tura otomatik ilerler.
+          </div>
+
+          <!-- ŞAMPİYONLUK EKRANI -->
+          <div id="championSection" class="champion-section hidden">
+
+            <div class="champion-glow"></div>
+
+            <span class="section-kicker">
+              THE FINAL RESULT
+            </span>
+
+            <h2>GECENİN ŞAMPİYONU</h2>
+
+            <div class="champion-trophy">
+              <img
+                src="hampions-league.png"
+                alt="Şampiyonluk Kupası"
+              />
+            </div>
+
+            <div
+              id="championPlayer"
+              class="champion-player"
+            >
+              ŞAMPİYON
+            </div>
+
+            <div class="champion-team">
+
+              <img
+                id="championTeamLogo"
+                src=""
+                alt=""
+              />
+
+              <span id="championTeamName"></span>
+
+            </div>
+
+            <div class="champion-event">
+              PLAYOFF CHAMPIONSHIP
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================== -->
+      <!-- 7. PUAN DURUMU / FİKSTÜR VE LİG TABLOSU            -->
+      <!-- ================================================== -->
+
+      <section id="standingsTool" class="view hidden">
+
+        <div class="tool-top">
+
+          <button id="standingsBackToTeams" class="ghost-btn" type="button">
+            ← TAKIMLARA DÖN
+          </button>
+
+          <div class="tool-event">
+            <span class="live-dot"></span>
+            <span id="standingsToolEventName">CUMA GECESİ KUPASI</span>
+          </div>
+
+        </div>
+
+        <div class="page-head compact">
+
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-line"></span>
+              ROUND ROBIN LEAGUE
+            </div>
+
+            <h1>PUAN DURUMU</h1>
+
+            <p>
+              Her maç sıralamayı değiştirebilir. Bütün karşılaşmaları
+              tamamlayarak gecenin şampiyonunu belirleyin.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- LİG ÖZETİ -->
+        <div class="roster-strip panel standings-overview">
+
+          <div>
+            <span class="section-kicker">OYUNCU SAYISI</span>
+            <strong id="standingsOverviewPlayers">0 oyuncu</strong>
+          </div>
+
+          <div>
+            <span class="section-kicker">TOPLAM MAÇ</span>
+            <strong id="standingsOverviewMatches">0 maç</strong>
+          </div>
+
+          <div>
+            <span class="section-kicker">TAMAMLANAN</span>
+            <strong id="standingsOverviewCompleted">0 / 0</strong>
+          </div>
+
+        </div>
+
+        <!-- PUAN TABLOSU -->
+        <section class="panel standings-table-panel">
+
+          <div class="panel-title">
+
+            <div>
+              <span class="section-kicker">01 / LEAGUE TABLE</span>
+              <h3>PUAN TABLOSU</h3>
+            </div>
+
+            <span class="count-pill">
+              LIVE
+            </span>
+
+          </div>
+
+          <div class="standings-table-wrap">
+
+            <table id="standingsTable" class="standings-table">
+
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>OYUNCU / TAKIM</th>
+                  <th>O</th>
+                  <th>G</th>
+                  <th>B</th>
+                  <th>M</th>
+                  <th>AV</th>
+                  <th>PUAN</th>
+                </tr>
+              </thead>
+
+              <tbody id="standingsTableBody">
+                <tr>
+                  <td colspan="8">
+                    Puan tablosu hazırlanıyor...
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+          <div class="standings-legend">
+            <span>O: Oynanan</span>
+            <span>G: Galibiyet</span>
+            <span>B: Beraberlik</span>
+            <span>M: Mağlubiyet</span>
+            <span>AV: Averaj</span>
+            <span>P: Puan</span>
+          </div>
+
+        </section>
+
+
+        <!-- FİKSTÜR -->
+        <section class="panel standings-fixtures-panel">
+
+          <div class="panel-title">
+
+            <div>
+              <span class="section-kicker">02 / MATCH SCHEDULE</span>
+              <h3>MAÇ FİKSTÜRÜ</h3>
+            </div>
+
+            <span id="standingsFixtureCount" class="count-pill">
+              0 MAÇ
+            </span>
+
+          </div>
+
+          <div
+            id="standingsFixtures"
+            class="standings-fixtures"
+          >
+
+            <div class="bracket-placeholder">
+              Fikstür oluşturulduğunda maçlar burada görünecek.
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- LİG TAMAMLANDI -->
+        <section
+          id="standingsChampionSection"
+          class="champion-section hidden"
+        >
+
+          <div class="champion-glow"></div>
+
+          <span class="section-kicker">
+            LEAGUE CHAMPION
+          </span>
+
+          <h2>LİGİN ŞAMPİYONU</h2>
+
+          <div class="champion-trophy">
+            <img
+              src="champions-league.png"
+              alt="Şampiyonluk Kupası"
+            />
+          </div>
+
+          <div
+            id="standingsChampionPlayer"
+            class="champion-player"
+          >
+            ŞAMPİYON
+          </div>
+
+          <div class="champion-team">
+
+            <img
+              id="standingsChampionTeamLogo"
+              src=""
+              alt=""
+            />
+
+            <span id="standingsChampionTeamName"></span>
+
+          </div>
+
+          <div class="champion-event">
+            PLAYOFF LEAGUE CHAMPIONSHIP
+          </div>
+
+        </section>
+
+        <div class="bottom-note">
+          <span class="note-star">✦</span>
+          HERKES BİRBİRİYLE OYNADI. ZİRVEDE SADECE BİRİ VAR.
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- ====================================================== -->
+    <!-- ALT BİLGİ                                              -->
+    <!-- ====================================================== -->
+
+    <footer class="footer">
+      <span>PLAYOFF © 2026</span>
+      <span>MADE FOR YOUR GAME NIGHT <b>✦</b></span>
+    </footer>
+
+
+    <!-- BİLDİRİM -->
+    <div id="toast" class="toast" role="status"></div>
+
+  </body>
+</html>
